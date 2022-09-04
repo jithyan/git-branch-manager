@@ -1,4 +1,9 @@
-import { getBranchList } from "./git";
+import React from "react";
+import { render } from "ink";
+import SelectInput from "ink-select-input";
+import { checkoutBranch, getBranchList } from "./git";
+import { renderUi } from "./selectBranchUi";
+import { error, highlight } from "./log";
 
 interface Command {
   name: string;
@@ -11,8 +16,21 @@ const switchCommand: Command = {
     const { branches, currentBranch } = await getBranchList();
     const checkedOutbranches = branches.filter((branch) => branch.isCheckedOut);
 
-    console.log(`Current branch: ${currentBranch}`);
-    console.log("checkedOutbranches", checkedOutbranches);
+    if (checkedOutbranches.length === 0) {
+      highlight("No branches checked out locally");
+      process.exit(0);
+    }
+
+    renderUi({
+      onBranchSelected: async (branch) => {
+        const success = await checkoutBranch(branch);
+        if (!success) {
+          process.exit(1);
+        }
+      },
+      currentBranch,
+      otherBranches: checkedOutbranches.map((b) => b.name),
+    });
   },
 };
 

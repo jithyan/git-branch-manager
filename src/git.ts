@@ -1,16 +1,50 @@
-import { exec } from "child_process";
+import { ChildProcess, exec } from "node:child_process";
+import { error } from "./log";
+import { highlight } from "./log";
 
 async function execCommand(command: string) {
-  return new Promise<string>((resolve, reject) =>
-    exec(command, (error, stdout, stderr) =>
-      error ? reject(stderr) : resolve(stdout)
-    )
-  );
+  let p: ChildProcess;
+  return new Promise<string>(
+    (resolve, reject) =>
+      (p = exec(command, (error, stdout, stderr) =>
+        error ? reject(stderr) : resolve(stdout)
+      ))
+  ).finally(() => {
+    p?.kill();
+  });
 }
 
 interface Branch {
   name: string;
   isCheckedOut: boolean;
+}
+
+export async function checkoutBranch(
+  branchName: string
+): Promise<boolean | string> {
+  return execCommand(`git checkout ${branchName}`)
+    .then((output) => {
+      highlight(output);
+      return true;
+    })
+    .catch((e) => {
+      error(e);
+      return false;
+    });
+}
+
+export async function deleteLocalBranch(
+  branchName: string
+): Promise<boolean | string> {
+  return execCommand(`git branch -D ${branchName}`)
+    .then((output) => {
+      highlight(output);
+      return true;
+    })
+    .catch((e) => {
+      error(e);
+      return false;
+    });
 }
 
 export async function getBranchList(): Promise<{

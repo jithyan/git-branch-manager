@@ -1,6 +1,6 @@
 import minimist from "minimist";
 import { commands } from "./commands";
-import { error } from "./console";
+import { error } from "./log";
 
 const argv = minimist(process.argv.slice(2));
 
