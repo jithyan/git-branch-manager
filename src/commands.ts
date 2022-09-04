@@ -1,9 +1,6 @@
-import React from "react";
-import { render } from "ink";
-import SelectInput from "ink-select-input";
 import { checkoutBranch, getBranchList } from "./git";
-import { renderUi } from "./selectBranchUi";
-import { error, highlight } from "./log";
+import { renderLoadingIndicator, renderSelect } from "./selectBranchUi";
+import { highlight, error } from "./log";
 
 interface Command {
   name: string;
@@ -13,20 +10,26 @@ interface Command {
 const switchCommand: Command = {
   name: "switch",
   execute: async (...args: string[]) => {
-    const { branches, currentBranch } = await getBranchList();
+    const clearLoading = renderLoadingIndicator();
+
+    const { branches, currentBranch } = await getBranchList().catch((e) => {
+      clearLoading();
+      error(e);
+      process.exit(1);
+    });
     const checkedOutbranches = branches.filter((branch) => branch.isCheckedOut);
+    clearLoading();
 
     if (checkedOutbranches.length === 0) {
-      highlight("No branches checked out locally");
+      highlight(
+        "No branches checked out locally. To checkout a branch from remote use 'add' instead."
+      );
       process.exit(0);
     }
 
-    renderUi({
+    renderSelect({
       onBranchSelected: async (branch) => {
-        const success = await checkoutBranch(branch);
-        if (!success) {
-          process.exit(1);
-        }
+        return checkoutBranch(branch);
       },
       currentBranch,
       otherBranches: checkedOutbranches.map((b) => b.name),
@@ -43,9 +46,6 @@ const addCommand: Command = {
         !branch.isCheckedOut &&
         branch.name.toUpperCase().includes(args[0] ?? "")
     );
-
-    console.log(`Current branch: ${currentBranch}`);
-    console.log("filteredRemoteBranches", filteredRemoteBranches);
   },
 };
 
@@ -54,9 +54,6 @@ const removeCommand: Command = {
   execute: async (...args: string[]) => {
     const { branches, currentBranch } = await getBranchList();
     const checkedOutbranches = branches.filter((branch) => branch.isCheckedOut);
-
-    console.log(`Current branch: ${currentBranch}`);
-    console.log("checkedOutbranches", checkedOutbranches);
   },
 };
 

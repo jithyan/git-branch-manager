@@ -1,14 +1,28 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { render, Box, Text, useApp } from "ink";
 import SelectInput from "ink-select-input";
+import Spinner from "ink-spinner";
 
 interface SelectFromBranchesProps {
   currentBranch: string;
   otherBranches: string[];
-  onBranchSelected: (branch: string) => Promise<void>;
+  onBranchSelected: (branch: string) => Promise<any>;
 }
 
-export function renderUi(props: SelectFromBranchesProps) {
+export function renderLoadingIndicator() {
+  const r = render(
+    <Text color="yellow">
+      <Spinner type="dots3" />
+    </Text>
+  );
+
+  return () => {
+    r.clear();
+    r.unmount();
+  };
+}
+
+export function renderSelect(props: SelectFromBranchesProps) {
   return render(<SelectFromBranches {...props} />);
 }
 
@@ -32,6 +46,18 @@ function SelectFromBranches({
     [otherBranches]
   );
 
+  const [status, setStatus] = useState<"READY" | "LOADING" | "EXIT">("READY");
+
+  if (status === "LOADING") {
+    return (
+      <Text color="green">
+        <Spinner type="dots" />
+      </Text>
+    );
+  } else if (status === "EXIT") {
+    return null;
+  }
+
   return (
     <Box flexDirection="column">
       <Box>
@@ -47,7 +73,11 @@ function SelectFromBranches({
             if (value === "exit") {
               exit();
             } else {
-              onBranchSelected(value).then(() => exit());
+              setStatus(() => "LOADING");
+              onBranchSelected(value).then(() => {
+                setStatus(() => "EXIT");
+                exit();
+              });
             }
           }}
         />

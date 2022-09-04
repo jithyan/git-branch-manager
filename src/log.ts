@@ -8,6 +8,6 @@ export function highlight(msg: string, ...logs: any[]) {
   console.log(chalk.cyan(msg), ...logs);
 }
 
-export function info(...logs: any[]) {
-  console.log(...logs);
+export function warn(msg: string, ...logs: any[]) {
+  console.log(chalk.yellow(msg), ...logs);
 }

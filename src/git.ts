@@ -1,16 +1,43 @@
-import { ChildProcess, exec } from "node:child_process";
+import { spawn } from "node:child_process";
+import { warn } from "node:console";
 import { error } from "./log";
 import { highlight } from "./log";
 
 async function execCommand(command: string) {
-  let p: ChildProcess;
-  return new Promise<string>(
-    (resolve, reject) =>
-      (p = exec(command, (error, stdout, stderr) =>
-        error ? reject(stderr) : resolve(stdout)
-      ))
-  ).finally(() => {
-    p?.kill();
+  return new Promise<string>((resolve, reject) => {
+    const list = command.split(" ");
+    const c = list[0];
+    const args = list.splice(1);
+
+    const ps = spawn(c, args);
+
+    let output = "";
+    let error = "";
+
+    ps.stdout.on("data", (data) => {
+      output += Buffer.from(data).toString("utf8");
+    });
+
+    ps.stderr.on("data", (err) => {
+      error += Buffer.from(err).toString("utf8");
+    });
+
+    ps.on("exit", (code) => {
+      output = output.trim();
+      error = error.trim();
+
+      if (code !== null && code > 0) {
+        if (output) {
+          warn(output);
+        }
+        reject(error);
+      } else {
+        if (error) {
+          warn(error);
+        }
+        resolve(output);
+      }
+    });
   });
 }
 
