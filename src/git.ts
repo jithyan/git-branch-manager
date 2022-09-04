@@ -46,7 +46,10 @@ export async function getBranchList(): Promise<{
         })
     )
   )
-    .filter((branchName) => branchName !== currentBranch)
+    .filter(
+      (branchName) =>
+        branchName !== currentBranch && !branchName.startsWith("HEAD")
+    )
     .map((branch) => ({
       name: branch,
       isCheckedOut: checkedOutbranches.has(branch),
