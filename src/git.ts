@@ -50,7 +50,13 @@ export async function checkoutBranch(
   branchName: string,
   isNewBranch = false
 ): Promise<boolean | string> {
-  return execCommand(`git checkout ${isNewBranch ? "-b" : ""} ${branchName}`)
+  return execCommand(
+    [
+      "git",
+      "checkout",
+      isNewBranch ? `-b ${branchName}` : `${branchName}`,
+    ].join(" ")
+  )
     .then((output) => {
       highlight(output);
       return true;
