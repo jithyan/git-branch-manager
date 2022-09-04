@@ -47,9 +47,10 @@ interface Branch {
 }
 
 export async function checkoutBranch(
-  branchName: string
+  branchName: string,
+  isNewBranch = false
 ): Promise<boolean | string> {
-  return execCommand(`git checkout ${branchName}`)
+  return execCommand(`git checkout ${isNewBranch ? "-b" : ""} ${branchName}`)
     .then((output) => {
       highlight(output);
       return true;
