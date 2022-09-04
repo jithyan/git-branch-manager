@@ -45,10 +45,12 @@ export async function getBranchList(): Promise<{
           return cleanedLine;
         })
     )
-  ).map((branch) => ({
-    name: branch,
-    isCheckedOut: checkedOutbranches.has(branch),
-  })) as Branch[];
+  )
+    .filter((branchName) => branchName !== currentBranch)
+    .map((branch) => ({
+      name: branch,
+      isCheckedOut: checkedOutbranches.has(branch),
+    })) as Branch[];
 
   return {
     currentBranch,
