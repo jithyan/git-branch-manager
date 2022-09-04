@@ -1,6 +1,5 @@
 import { spawn } from "node:child_process";
-import { warn } from "node:console";
-import { error } from "./log";
+import { error, warn } from "./log";
 import { highlight } from "./log";
 
 async function execCommand(command: string) {
