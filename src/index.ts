@@ -1,15 +1,14 @@
 #!/usr/bin/env node
 "use strict";
 import minimist from "minimist";
-import { commands } from "./commands";
+import { Commands } from "./commands";
 import { error } from "./log";
 
 const argv = minimist(process.argv.slice(2));
-
 run(...argv._);
 
 function run(...args: string[]) {
-  const command = commands.get(args[0]);
+  const command = Commands.get(args[0]);
 
   if (!command) {
     error("Unrecognized command: ", args[0]);

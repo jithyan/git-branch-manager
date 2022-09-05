@@ -7,29 +7,32 @@ interface Command {
   execute: (...args: string[]) => Promise<void>;
 }
 
-function handleErrorAndExit(clearLoading: () => void) {
-  return (e: any) => {
+async function renderLoadingUntilComplete<R = any>(
+  work: () => Promise<R>
+): Promise<R> {
+  const clearLoading = renderLoadingIndicator();
+  try {
+    const result = await work();
+    clearLoading();
+    return result;
+  } catch (e: any) {
     clearLoading();
     error(e);
     process.exit(1);
-  };
+  }
 }
 
 const switchCommand: Command = {
   name: "switch",
   execute: async (...args: string[]) => {
-    const clearLoading = renderLoadingIndicator();
-
-    const { branches, currentBranch } = await getBranchList().catch(
-      handleErrorAndExit(clearLoading)
+    const { branches, currentBranch } = await renderLoadingUntilComplete(
+      getBranchList
     );
     const checkedOutbranches = branches.filter((branch) => branch.isCheckedOut);
-    clearLoading();
 
     if (checkedOutbranches.length === 0) {
-      highlight(
-        "No branches checked out locally. To checkout a branch from remote use 'add' instead."
-      );
+      highlight("No branches checked out locally.");
+      highlight("To checkout a branch from remote use 'add' instead.");
       process.exit(0);
     }
 
@@ -46,17 +49,14 @@ const switchCommand: Command = {
 const addCommand: Command = {
   name: "add",
   execute: async (...args: string[]) => {
-    const clearLoading = renderLoadingIndicator();
-
-    const { branches, currentBranch } = await getBranchList().catch(
-      handleErrorAndExit(clearLoading)
+    const { branches, currentBranch } = await renderLoadingUntilComplete(
+      getBranchList
     );
     const filteredRemoteBranches = branches.filter(
       (branch) =>
         !branch.isCheckedOut &&
-        branch.name.toUpperCase().includes(args[0].toUpperCase() ?? "")
+        branch.name.toUpperCase().includes(args[0]?.toUpperCase() ?? "")
     );
-    clearLoading();
 
     if (filteredRemoteBranches.length === 0) {
       highlight("No branches found in remote found to add.");
@@ -64,9 +64,7 @@ const addCommand: Command = {
     }
 
     renderSelect({
-      onBranchSelected: async (branch) => {
-        return checkoutBranch(branch);
-      },
+      onBranchSelected: (branch) => checkoutBranch(branch),
       currentBranch,
       otherBranches: filteredRemoteBranches.map((b) => b.name),
     });
@@ -76,13 +74,10 @@ const addCommand: Command = {
 const removeCommand: Command = {
   name: "remove",
   execute: async (...args: string[]) => {
-    const clearLoading = renderLoadingIndicator();
-
-    const { branches, currentBranch } = await getBranchList().catch(
-      handleErrorAndExit(clearLoading)
+    const { branches, currentBranch } = await renderLoadingUntilComplete(
+      getBranchList
     );
     const checkedOutbranches = branches.filter((branch) => branch.isCheckedOut);
-    clearLoading();
 
     if (checkedOutbranches.length === 0) {
       highlight("Nothing to remove - No branches checked out locally");
@@ -90,9 +85,7 @@ const removeCommand: Command = {
     }
 
     renderSelect({
-      onBranchSelected: async (branch) => {
-        return deleteLocalBranch(branch);
-      },
+      onBranchSelected: async (branch) => deleteLocalBranch(branch),
       currentBranch,
       otherBranches: checkedOutbranches.map((b) => b.name),
     });
@@ -101,6 +94,6 @@ const removeCommand: Command = {
 
 const commandList = [switchCommand, addCommand, removeCommand] as const;
 
-export const commands = new Map(
+export const Commands = new Map(
   commandList.map((command) => [command.name, command])
 );
