@@ -3,7 +3,8 @@
   "packageManager": "yarn@3.2.3",
   "scripts": {
     "build": "rm -rfd build && tsc",
-    "start": "yarn build && node build/index.js"
+    "start": "yarn build && node build/index.js",
+    "dist": "rm -rfd dist && mkdir dist && yarn build && cp build/* dist/"
   },
   "devDependencies": {
     "@types/chalk": "^2.2.0",
@@ -19,5 +20,8 @@
     "ink-spinner": "^4.0.3",
     "minimist": "^1.2.6",
     "react": "^18.2.0"
+  },
+  "bin": {
+    "gbranch": "./dist/index.js"
   }
 }

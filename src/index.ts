@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+"use strict";
 import minimist from "minimist";
 import { commands } from "./commands";
 import { error } from "./log";
