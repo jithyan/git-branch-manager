@@ -46,16 +46,9 @@ interface Branch {
 }
 
 export async function checkoutBranch(
-  branchName: string,
-  isNewBranch = false
+  branchName: string
 ): Promise<boolean | string> {
-  return execCommand(
-    [
-      "git",
-      "checkout",
-      isNewBranch ? `-b ${branchName}` : `${branchName}`,
-    ].join(" ")
-  )
+  return execCommand(`git checkout ${branchName}`)
     .then((output) => {
       highlight(output);
       return true;
@@ -84,6 +77,7 @@ export async function getBranchList(): Promise<{
   branches: Branch[];
   currentBranch: string;
 }> {
+  await execCommand("git fetch");
   const output = await execCommand("git branch --list --all");
 
   let currentBranch = "";

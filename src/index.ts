@@ -15,5 +15,6 @@ function run(...args: string[]) {
     error("Unrecognized command: ", args[0]);
     process.exit(1);
   }
+
   command.execute(...args.slice(1));
 }

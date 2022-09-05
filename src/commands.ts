@@ -54,7 +54,7 @@ const addCommand: Command = {
     const filteredRemoteBranches = branches.filter(
       (branch) =>
         !branch.isCheckedOut &&
-        branch.name.toUpperCase().includes(args[0] ?? "")
+        branch.name.toUpperCase().includes(args[0].toUpperCase() ?? "")
     );
     clearLoading();
 
@@ -65,7 +65,7 @@ const addCommand: Command = {
 
     renderSelect({
       onBranchSelected: async (branch) => {
-        return checkoutBranch(branch, true);
+        return checkoutBranch(branch);
       },
       currentBranch,
       otherBranches: filteredRemoteBranches.map((b) => b.name),
