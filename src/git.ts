@@ -73,11 +73,13 @@ export async function deleteLocalBranch(
     });
 }
 
-export async function getBranchList(): Promise<{
+export async function getBranchList(fetchFirst = false): Promise<{
   branches: Branch[];
   currentBranch: string;
 }> {
-  await execCommand("git fetch");
+  if (fetchFirst) {
+    await execCommand("git fetch");
+  }
   const output = await execCommand("git branch --list --all");
 
   let currentBranch = "";

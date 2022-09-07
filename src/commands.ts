@@ -49,8 +49,8 @@ const switchCommand: Command = {
 const addCommand: Command = {
   name: "add",
   execute: async (...args: string[]) => {
-    const { branches, currentBranch } = await renderLoadingUntilComplete(
-      getBranchList
+    const { branches, currentBranch } = await renderLoadingUntilComplete(() =>
+      getBranchList(true)
     );
     const filteredRemoteBranches = branches.filter(
       (branch) =>
