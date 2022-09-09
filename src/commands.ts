@@ -1,6 +1,6 @@
 import { checkoutBranch, deleteLocalBranch, getBranchList } from "./git";
 import { renderLoadingIndicator, renderSelect } from "./selectBranchUi";
-import { highlight, error } from "./log";
+import { logHighlight, logError } from "./log";
 
 interface Command {
   name: string;
@@ -17,7 +17,7 @@ async function renderLoadingUntilComplete<R = any>(
     return result;
   } catch (e: any) {
     clearLoading();
-    error(e);
+    logError(e);
     process.exit(1);
   }
 }
@@ -31,8 +31,8 @@ const switchCommand: Command = {
     const checkedOutbranches = branches.filter((branch) => branch.isCheckedOut);
 
     if (checkedOutbranches.length === 0) {
-      highlight("No branches checked out locally.");
-      highlight("To checkout a branch from remote use 'add' instead.");
+      logHighlight("No branches checked out locally.");
+      logHighlight("To checkout a branch from remote use 'add' instead.");
       process.exit(0);
     }
 
@@ -59,7 +59,7 @@ const addCommand: Command = {
     );
 
     if (filteredRemoteBranches.length === 0) {
-      highlight("No branches found in remote found to add.");
+      logHighlight("No branches found in remote found to add.");
       process.exit(0);
     }
 
@@ -80,7 +80,7 @@ const removeCommand: Command = {
     const checkedOutbranches = branches.filter((branch) => branch.isCheckedOut);
 
     if (checkedOutbranches.length === 0) {
-      highlight("Nothing to remove - No branches checked out locally");
+      logHighlight("Nothing to remove - No branches checked out locally");
       process.exit(0);
     }
 

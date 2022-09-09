@@ -1,38 +1,35 @@
-import { spawn } from "node:child_process";
-import { error, warn } from "./log";
-import { highlight } from "./log";
+import { spawn } from "child_process";
+import { logError, logWarn } from "./log";
+import { logHighlight } from "./log";
 
-async function execCommand(command: string) {
+async function execCommand([command, ...opts]: string[]) {
   return new Promise<string>((resolve, reject) => {
-    const list = command.split(" ");
-    const c = list[0];
-    const args = list.splice(1);
-
-    const ps = spawn(c, args);
+    const commandProcess = spawn(command, opts);
 
     let output = "";
-    let error = "";
+    let errorOutput = "";
 
-    ps.stdout.on("data", (data) => {
+    commandProcess.stdout.on("data", (data) => {
       output += Buffer.from(data).toString("utf8");
     });
 
-    ps.stderr.on("data", (err) => {
-      error += Buffer.from(err).toString("utf8");
+    commandProcess.stderr.on("data", (err) => {
+      errorOutput += Buffer.from(err).toString("utf8");
     });
 
-    ps.on("exit", (code) => {
+    commandProcess.on("exit", (code) => {
       output = output.trim();
-      error = error.trim();
+      errorOutput = errorOutput.trim();
+      const commandFailed = code !== null && code > 0;
 
-      if (code !== null && code > 0) {
+      if (commandFailed) {
         if (output) {
-          warn(output);
+          logWarn(output);
         }
-        reject(error);
+        reject(errorOutput);
       } else {
-        if (error) {
-          warn(error);
+        if (errorOutput) {
+          logWarn(errorOutput);
         }
         resolve(output);
       }
@@ -48,13 +45,13 @@ interface Branch {
 export async function checkoutBranch(
   branchName: string
 ): Promise<boolean | string> {
-  return execCommand(`git checkout ${branchName}`)
+  return execCommand(["git", "checkout", branchName])
     .then((output) => {
-      highlight(output);
+      logHighlight(output);
       return true;
     })
     .catch((e) => {
-      error(e);
+      logError(e);
       return false;
     });
 }
@@ -62,13 +59,13 @@ export async function checkoutBranch(
 export async function deleteLocalBranch(
   branchName: string
 ): Promise<boolean | string> {
-  return execCommand(`git branch -D ${branchName}`)
+  return execCommand(["git", "branch", "-D", branchName])
     .then((output) => {
-      highlight(output);
+      logHighlight(output);
       return true;
     })
     .catch((e) => {
-      error(e);
+      logError(e);
       return false;
     });
 }
@@ -78,9 +75,9 @@ export async function getBranchList(fetchFirst = false): Promise<{
   currentBranch: string;
 }> {
   if (fetchFirst) {
-    await execCommand("git fetch");
+    await execCommand(["git", "fetch"]);
   }
-  const output = await execCommand("git branch --list --all");
+  const output = await execCommand(["git", "branch", "--list", "--all"]);
 
   let currentBranch = "";
   const checkedOutbranches = new Set<string>();
