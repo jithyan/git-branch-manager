@@ -9,14 +9,14 @@ Simple CLI to avoid typing out full git branch names for switching or deleting b
 3. `yarn`
 4. `npm install -g .`
 
-Now you can run it by calling `gbranch`.
+Now you can run it by calling `gb`.
 
 > If you run into trouble running `yarn` in a corporate proxy, you will have to update `.yarnrc.yml` to add ca-certs and proxy config. See the [yarn docs for more info](https://yarnpkg.com/configuration/yarnrc).
 
 ## How to use
 
 1. `cd` into a `git` repo.
-2. Run `gbranch <command>`
+2. Run `gb <command>`
 
 ### Available commands
 
@@ -26,7 +26,7 @@ Allows you to select a branch that is checked out locally to switch to. Equivale
 
 Example:
 
-`gbranch switch`
+`gb switch`
 
 ![switch example](./img/switch.png)
 
@@ -36,7 +36,7 @@ Allows you to select a branch that is checked out locally to remove. Equivalent 
 
 Example:
 
-`gbranch remove`
+`gb remove`
 
 ![remove example](./img/remove.png)
 
@@ -47,6 +47,6 @@ Allows you to filter branches from remote and select a branch to checkout locall
 
 Example:
 
-`gbranch add fix`
+`gb add fix`
 
 ![add example](./img/add.png)

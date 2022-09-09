@@ -3,15 +3,16 @@
   "packageManager": "yarn@3.2.3",
   "version": "1.2.0",
   "scripts": {
-    "build": "rm -rfd build && tsc",
+    "build": "rimraf -rfd build && tsc",
     "start": "yarn build && node build/index.js",
-    "dist": "rm -rfd dist && mkdir dist && yarn build && cp build/* dist/"
+    "dist": "rimraf -rfd dist && mkdir dist && yarn build && cp build/* dist/"
   },
   "devDependencies": {
     "@types/chalk": "^2.2.0",
     "@types/minimist": "^1.2.2",
     "@types/node": "^18.7.14",
     "@types/react": "^18.0.18",
+    "rimraf": "^3.0.2",
     "typescript": "^4.8.2"
   },
   "dependencies": {
@@ -23,6 +24,6 @@
     "react": "^18.2.0"
   },
   "bin": {
-    "gbranch": "./dist/index.js"
+    "gb": "./dist/index.js"
   }
 }
