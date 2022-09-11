@@ -24,6 +24,6 @@
     "react": "^18.2.0"
   },
   "bin": {
-    "gb": "./dist/index.js"
+    "gbm": "./dist/index.js"
   }
 }
