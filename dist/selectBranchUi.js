@@ -35,7 +35,7 @@ function SelectFromBranches({ currentBranch, otherBranches, onBranchSelected, })
     else if (status === "EXIT") {
         return null;
     }
-    return ((0, jsx_runtime_1.jsxs)(ink_1.Box, { flexDirection: "column", children: [(0, jsx_runtime_1.jsx)(ink_1.Box, { children: (0, jsx_runtime_1.jsxs)(ink_1.Text, { children: [(0, jsx_runtime_1.jsx)(ink_1.Text, { color: "white", children: "currently on " }), (0, jsx_runtime_1.jsx)(ink_1.Text, { color: "cyan", children: currentBranch })] }) }), (0, jsx_runtime_1.jsx)(ink_1.Box, { marginX: 1, children: (0, jsx_runtime_1.jsx)(ink_select_input_1.default, { items: items, onSelect: ({ value }) => {
+    return ((0, jsx_runtime_1.jsxs)(ink_1.Box, { flexDirection: "column", children: [(0, jsx_runtime_1.jsx)(Show, { when: Boolean(currentBranch), children: (0, jsx_runtime_1.jsx)(ink_1.Box, { children: (0, jsx_runtime_1.jsxs)(ink_1.Text, { children: [(0, jsx_runtime_1.jsx)(ink_1.Text, { color: "white", children: "currently on " }), (0, jsx_runtime_1.jsx)(ink_1.Text, { color: "cyan", children: currentBranch })] }) }) }), (0, jsx_runtime_1.jsx)(ink_1.Box, { marginX: 1, children: (0, jsx_runtime_1.jsx)(ink_select_input_1.default, { items: items, onSelect: ({ value }) => {
                         if (value === "exit") {
                             exit();
                         }
@@ -47,4 +47,7 @@ function SelectFromBranches({ currentBranch, otherBranches, onBranchSelected, })
                             });
                         }
                     } }) })] }));
+}
+function Show({ when, children, }) {
+    return when ? children : null;
 }

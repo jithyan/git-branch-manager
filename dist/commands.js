@@ -40,11 +40,8 @@ const addCommand = {
     name: "add",
     execute: async (...args) => {
         const { branches, currentBranch } = await renderLoadingUntilComplete(() => (0, git_1.getBranchList)(true));
-        const filteredRemoteBranches = branches.filter((branch) => {
-            var _a, _b;
-            return !branch.isCheckedOut &&
-                branch.name.toUpperCase().includes((_b = (_a = args[0]) === null || _a === void 0 ? void 0 : _a.toUpperCase()) !== null && _b !== void 0 ? _b : "");
-        });
+        const filteredRemoteBranches = branches.filter((branch) => !branch.isCheckedOut &&
+            branch.name.toUpperCase().includes(args[0]?.toUpperCase() ?? ""));
         if (filteredRemoteBranches.length === 0) {
             (0, log_1.logHighlight)("No branches found in remote found to add.");
             process.exit(0);
@@ -72,5 +69,27 @@ const removeCommand = {
         });
     },
 };
-const commandList = [switchCommand, addCommand, removeCommand];
+const stashCommand = {
+    name: "stash",
+    execute: async (...args) => {
+        const stashList = await renderLoadingUntilComplete(git_1.getStashList);
+        if (stashList.length === 0) {
+            (0, log_1.logHighlight)("Stash is empty");
+            process.exit(0);
+        }
+        (0, selectBranchUi_1.renderSelect)({
+            onBranchSelected: async (desc) => {
+                const stashId = stashList.find((s) => s.description === desc)?.id ?? "";
+                return (0, git_1.applyStash)(stashId);
+            },
+            otherBranches: stashList.map((b) => b.description),
+        });
+    },
+};
+const commandList = [
+    switchCommand,
+    addCommand,
+    removeCommand,
+    stashCommand,
+];
 exports.Commands = new Map(commandList.map((command) => [command.name, command]));
