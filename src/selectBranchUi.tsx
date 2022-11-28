@@ -4,7 +4,7 @@ import SelectInput from "ink-select-input";
 import Spinner from "ink-spinner";
 
 interface SelectFromBranchesProps {
-  currentBranch: string;
+  currentBranch?: string;
   otherBranches: string[];
   onBranchSelected: (branch: string) => Promise<any>;
 }
@@ -35,11 +35,7 @@ function SelectFromBranches({
   currentBranch,
   otherBranches,
   onBranchSelected,
-}: {
-  currentBranch: string;
-  otherBranches: string[];
-  onBranchSelected: (branch: string) => Promise<void>;
-}) {
+}: SelectFromBranchesProps) {
   const { exit } = useApp();
   const items = useMemo(
     () => [...otherBranches.map((b) => ({ label: b, value: b })), exitAppItem],
@@ -60,12 +56,14 @@ function SelectFromBranches({
 
   return (
     <Box flexDirection="column">
-      <Box>
-        <Text>
-          <Text color="white">currently on </Text>
-          <Text color="cyan">{currentBranch}</Text>
-        </Text>
-      </Box>
+      <Show when={Boolean(currentBranch)}>
+        <Box>
+          <Text>
+            <Text color="white">currently on </Text>
+            <Text color="cyan">{currentBranch}</Text>
+          </Text>
+        </Box>
+      </Show>
       <Box marginX={1}>
         <SelectInput
           items={items}
@@ -84,4 +82,14 @@ function SelectFromBranches({
       </Box>
     </Box>
   );
+}
+
+function Show({
+  when,
+  children,
+}: {
+  when: boolean;
+  children: JSX.Element;
+}): JSX.Element | null {
+  return when ? children : null;
 }

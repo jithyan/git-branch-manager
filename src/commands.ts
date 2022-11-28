@@ -1,4 +1,10 @@
-import { checkoutBranch, deleteLocalBranch, getBranchList } from "./git";
+import {
+  applyStash,
+  checkoutBranch,
+  deleteLocalBranch,
+  getBranchList,
+  getStashList,
+} from "./git";
 import { renderLoadingIndicator, renderSelect } from "./selectBranchUi";
 import { logHighlight, logError } from "./log";
 
@@ -92,7 +98,31 @@ const removeCommand: Command = {
   },
 };
 
-const commandList = [switchCommand, addCommand, removeCommand] as const;
+const stashCommand: Command = {
+  name: "stash",
+  execute: async (...args: string[]) => {
+    const stashList = await renderLoadingUntilComplete(getStashList);
+    if (stashList.length === 0) {
+      logHighlight("Stash is empty");
+      process.exit(0);
+    }
+
+    renderSelect({
+      onBranchSelected: async (desc) => {
+        const stashId = stashList.find((s) => s.description === desc)?.id ?? "";
+        return applyStash(stashId);
+      },
+      otherBranches: stashList.map((b) => b.description),
+    });
+  },
+};
+
+const commandList = [
+  switchCommand,
+  addCommand,
+  removeCommand,
+  stashCommand,
+] as const satisfies Readonly<Command[]>;
 
 export const Commands = new Map(
   commandList.map((command) => [command.name, command])
