@@ -51,7 +51,7 @@ Example:
 
 ![add example](./img/add.png)
 
-#### remove
+#### stash
 
 Allows you to select and apply a stash. Equivalent to running `git stash apply <stash_name>`.
 
