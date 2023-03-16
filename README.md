@@ -50,3 +50,13 @@ Example:
 `gbm add fix`
 
 ![add example](./img/add.png)
+
+#### remove
+
+Allows you to select and apply a stash. Equivalent to running `git stash apply <stash_name>`.
+
+Example:
+
+`gbm stash`
+
+![stash example](./img/stash.png)
