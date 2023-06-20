@@ -4,10 +4,11 @@ Simple CLI to avoid typing out full git branch names for switching or deleting b
 
 ## Get started
 
-1. `git clone https://github.com/jithyan/git-branch-manager.git`
-2. `cd git-branch-manager`
-3. `yarn`
-4. `npm install -g .`
+> This will only will work with Node 16 and above
+
+```bash
+npm install -g @jithyan/git-branch-manager
+```
 
 Now you can run it by calling `gbm`.
 

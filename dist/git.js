@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBranchList = exports.applyStash = exports.getStashList = exports.deleteLocalBranch = exports.checkoutBranch = void 0;
-const child_process_1 = require("child_process");
-const log_1 = require("./log");
+import { spawn } from "child_process";
+import { logError, logWarn, logHighlight } from "./log.js";
 function getTrimmedLines(output) {
     return output
         .split("\n")
@@ -11,7 +8,7 @@ function getTrimmedLines(output) {
 }
 async function execCommand([command, ...opts]) {
     return new Promise((resolve, reject) => {
-        const commandProcess = (0, child_process_1.spawn)(command, opts);
+        const commandProcess = spawn(command, opts);
         let output = "";
         let errorOutput = "";
         commandProcess.stdout.on("data", (data) => {
@@ -26,44 +23,42 @@ async function execCommand([command, ...opts]) {
             const commandFailed = code !== null && code > 0;
             if (commandFailed) {
                 if (output) {
-                    (0, log_1.logWarn)(output);
+                    logWarn(output);
                 }
                 reject(errorOutput);
             }
             else {
                 if (errorOutput) {
-                    (0, log_1.logWarn)(errorOutput);
+                    logWarn(errorOutput);
                 }
                 resolve(output);
             }
         });
     });
 }
-async function checkoutBranch(branchName) {
+export async function checkoutBranch(branchName) {
     return execCommand(["git", "checkout", branchName])
         .then((output) => {
-        (0, log_1.logHighlight)(output);
+        logHighlight(output);
         return true;
     })
         .catch((e) => {
-        (0, log_1.logError)(e);
+        logError(e);
         return false;
     });
 }
-exports.checkoutBranch = checkoutBranch;
-async function deleteLocalBranch(branchName) {
+export async function deleteLocalBranch(branchName) {
     return execCommand(["git", "branch", "-D", branchName])
         .then((output) => {
-        (0, log_1.logHighlight)(output);
+        logHighlight(output);
         return true;
     })
         .catch((e) => {
-        (0, log_1.logError)(e);
+        logError(e);
         return false;
     });
 }
-exports.deleteLocalBranch = deleteLocalBranch;
-async function getStashList() {
+export async function getStashList() {
     const output = await execCommand(["git", "stash", "list"]);
     return getTrimmedLines(output).map((line) => {
         const details = line.split(":").map((part) => part.trim());
@@ -73,20 +68,18 @@ async function getStashList() {
         };
     });
 }
-exports.getStashList = getStashList;
-async function applyStash(stashId) {
+export async function applyStash(stashId) {
     return execCommand(["git", "stash", "apply", stashId])
         .then((output) => {
-        (0, log_1.logHighlight)(output);
+        logHighlight(output);
         return true;
     })
         .catch((e) => {
-        (0, log_1.logError)(e);
+        logError(e);
         return false;
     });
 }
-exports.applyStash = applyStash;
-async function getBranchList(fetchFirst = false) {
+export async function getBranchList(fetchFirst = false) {
     if (fetchFirst) {
         await execCommand(["git", "fetch"]);
     }
@@ -117,4 +110,3 @@ async function getBranchList(fetchFirst = false) {
         branches,
     };
 }
-exports.getBranchList = getBranchList;
