@@ -1,5 +1,5 @@
 import { spawn } from "child_process";
-import { logError, logWarn, logHighlight } from "./log";
+import { logError, logWarn, logHighlight } from "./log.js";
 
 function getTrimmedLines(output: string): string[] {
   return output

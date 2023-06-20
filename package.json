@@ -1,7 +1,17 @@
 {
-  "name": "git-branch-manager",
+  "name": "@jithyan/git-branch-manager",
   "packageManager": "yarn@3.3.0",
   "version": "1.3.0",
+  "author": "jithyan",
+  "type": "module",
+  "engines": {
+    "node": ">=16"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jithyan/git-branch-manager.git"
+  },
+  "keywords": [],
   "scripts": {
     "build": "tsc",
     "start": "yarn build && node build/index.js",
@@ -11,20 +21,27 @@
     "@types/chalk": "^2.2.0",
     "@types/minimist": "^1.2.2",
     "@types/node": "^18.11.9",
-    "@types/react": "^18.0.25",
-    "prettier": "^2.8.0",
-    "rimraf": "^3.0.2",
-    "typescript": "^4.9.3"
+    "@types/react": "^18.2.13",
+    "prettier": "^2.8.8",
+    "rimraf": "^5.0.1",
+    "typescript": "^5.1.3"
   },
   "dependencies": {
-    "chalk": "4.1.2",
-    "ink": "^3.2.0",
-    "ink-select-input": "^4.2.1",
-    "ink-spinner": "^4.0.3",
-    "minimist": "^1.2.7",
+    "chalk": "5.2.0",
+    "ink": "^4.2.0",
+    "ink-select-input": "^5.0.0",
+    "ink-spinner": "^5.0.0",
+    "minimist": "^1.2.8",
     "react": "^18.2.0"
   },
   "bin": {
-    "gbm": "./dist/index.js"
-  }
+    "gbm": "dist/index.js"
+  },
+  "description": "Simple CLI to avoid typing out full git branch names for switching or deleting branches.",
+  "bugs": {
+    "url": "https://github.com/jithyan/git-branch-manager/issues"
+  },
+  "homepage": "https://github.com/jithyan/git-branch-manager#readme",
+  "main": "index.js",
+  "license": "ISC"
 }

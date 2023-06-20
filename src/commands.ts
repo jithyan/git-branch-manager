@@ -4,9 +4,9 @@ import {
   deleteLocalBranch,
   getBranchList,
   getStashList,
-} from "./git";
-import { renderLoadingIndicator, renderSelect } from "./selectBranchUi";
-import { logHighlight, logError } from "./log";
+} from "./git.js";
+import { renderLoadingIndicator, renderSelect } from "./selectBranchUi.js";
+import { logHighlight, logError } from "./log.js";
 
 interface Command {
   name: string;

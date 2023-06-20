@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 "use strict";
 import minimist from "minimist";
-import { Commands } from "./commands";
-import { logError } from "./log";
+import { Commands } from "./commands.js";
+import { logError } from "./log.js";
 
 const argv = minimist(process.argv.slice(2));
 run(...argv._);
