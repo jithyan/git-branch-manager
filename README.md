@@ -12,8 +12,6 @@ npm install -g @jithyan/git-branch-manager
 
 Now you can run it by calling `gbm`.
 
-> If you run into trouble running `yarn` in a corporate proxy, you will have to update `.yarnrc.yml` to add ca-certs and proxy config. See the [yarn docs for more info](https://yarnpkg.com/configuration/yarnrc).
-
 ## How to use
 
 1. `cd` into a `git` repo.
