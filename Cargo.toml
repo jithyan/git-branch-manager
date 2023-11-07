@@ -1,0 +1,25 @@
+[package]
+edition = "2021"
+name = "jithyan_git-branch-manager"
+version = "0.0.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+clap = "4.4.7"
+console = "0.15.7"
+dialoguer = { version = "0.11.0", features = ["fuzzy-select"] }
+emoji-printer = "0.4.3"
+indicatif = "0.17.7"
+# Default enable napi4 feature, see https://nodejs.org/api/n-api.html#node-api-version-matrix
+napi = { version = "2.12.2", default-features = false, features = ["napi4"] }
+napi-derive = "2.12.2"
+spinners = "4.1.0"
+
+
+[build-dependencies]
+napi-build = "2.0.1"
+
+[profile.release]
+lto = true
