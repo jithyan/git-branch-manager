@@ -1,0 +1,51 @@
+{
+  "name": "@jithyan/git-branch-manager",
+  "version": "3.0.0-alpha",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "author": "jithyan",
+  "type": "module",
+  "napi": {
+    "name": "git-branch-manager",
+    "triples": {
+      "additional": [
+        "aarch64-apple-darwin"
+      ]
+    }
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@napi-rs/cli": "^2.16.5",
+    "ava": "^5.1.1"
+  },
+  "keywords": [
+    "git",
+    "utility",
+    "branch",
+    "cli"
+  ],
+  "ava": {
+    "timeout": "3m"
+  },
+  "engines": {
+    "node": ">= 20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jithyan/git-branch-manager.git"
+  },
+  "scripts": {
+    "artifacts": "napi artifacts",
+    "build": "napi build --platform --release",
+    "build:debug": "napi build --platform",
+    "prepublishOnly": "napi prepublish -t npm",
+    "test": "ava",
+    "universal": "napi universal",
+    "version": "napi version"
+  },
+  "description": "Simple CLI to avoid typing out full git branch names for switching or deleting branches.",
+  "bugs": {
+    "url": "https://github.com/jithyan/git-branch-manager/issues"
+  },
+  "homepage": "https://github.com/jithyan/git-branch-manager#readme"
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@jithyan/git-branch-manager-linux-x64-gnu",
+  "version": "0.0.0",
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "main": "git-branch-manager.linux-x64-gnu.node",
+  "files": [
+    "git-branch-manager.linux-x64-gnu.node"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">= 10"
+  },
+  "libc": [
+    "glibc"
+  ]
+}
