@@ -1,7 +1,7 @@
-import test from 'ava'
+import test from "ava";
 
-import { sum } from '../index.js'
+import { cli } from "../index.js";
 
-test('sum from native', (t) => {
-  t.is(sum(1, 2), 3)
-})
+test("cli exists in native", (t) => {
+  t.truthy(Boolean(cli));
+});
