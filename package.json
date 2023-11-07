@@ -1,10 +1,9 @@
 {
   "name": "@jithyan/git-branch-manager",
   "version": "3.0.0-alpha",
-  "main": "index.js",
+  "main": "bin.js",
   "types": "index.d.ts",
   "author": "jithyan",
-  "type": "module",
   "napi": {
     "name": "git-branch-manager",
     "triples": {
@@ -28,11 +27,14 @@
     "timeout": "3m"
   },
   "engines": {
-    "node": ">= 20"
+    "node": ">= 18"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jithyan/git-branch-manager.git"
+  },
+  "bin": {
+    "gbm": "bin.js"
   },
   "scripts": {
     "artifacts": "napi artifacts",
