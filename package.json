@@ -49,5 +49,6 @@
   "bugs": {
     "url": "https://github.com/jithyan/git-branch-manager/issues"
   },
-  "homepage": "https://github.com/jithyan/git-branch-manager#readme"
+  "homepage": "https://github.com/jithyan/git-branch-manager#readme",
+  "packageManager": "yarn@4.0.1"
 }
