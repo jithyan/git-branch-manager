@@ -52,9 +52,11 @@
   },
   "homepage": "https://github.com/jithyan/git-branch-manager#readme",
   "packageManager": "yarn@4.0.1",
-  "dependencies": {
-    "pkg": "^5.8.1",
-    "pkg-conf": "^5.0.0"
-  },
-  "stableVersion": "3.0.0"
+  "stableVersion": "3.0.0",
+  "optionalDependencies": {
+    "@jithyan/git-branch-manager-darwin-arm64": "3.0.0",
+    "@jithyan/git-branch-manager-darwin-x64": "3.0.0",
+    "@jithyan/git-branch-manager-linux-x64-gnu": "3.0.0",
+    "@jithyan/git-branch-manager-win32-x64-msvc": "3.0.0"
+  }
 }
