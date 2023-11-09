@@ -1,6 +1,6 @@
 {
   "name": "@jithyan/git-branch-manager",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "main": "bin.js",
   "types": "index.d.ts",
   "author": "jithyan",
@@ -52,7 +52,6 @@
   },
   "homepage": "https://github.com/jithyan/git-branch-manager#readme",
   "packageManager": "yarn@4.0.1",
-  "stableVersion": "3.0.0",
   "optionalDependencies": {
     "@jithyan/git-branch-manager-darwin-arm64": "3.0.0",
     "@jithyan/git-branch-manager-darwin-x64": "3.0.0",
