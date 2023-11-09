@@ -1,6 +1,6 @@
 {
   "name": "@jithyan/git-branch-manager-win32-x64-msvc",
-  "version": "0.0.0",
+  "version": "3.0.0",
   "os": [
     "win32"
   ],
@@ -11,8 +11,24 @@
   "files": [
     "git-branch-manager.win32-x64-msvc.node"
   ],
+  "description": "Simple CLI to avoid typing out full git branch names for switching or deleting branches.",
+  "keywords": [
+    "git",
+    "utility",
+    "branch",
+    "cli"
+  ],
+  "author": "jithyan",
+  "homepage": "https://github.com/jithyan/git-branch-manager#readme",
   "license": "MIT",
   "engines": {
-    "node": ">= 10"
+    "node": ">= 18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jithyan/git-branch-manager.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jithyan/git-branch-manager/issues"
   }
 }

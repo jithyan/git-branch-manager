@@ -19,12 +19,53 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jithyan/git-branch-manager-darwin-arm64@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@jithyan/git-branch-manager-darwin-arm64@npm:3.0.0"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@jithyan/git-branch-manager-darwin-x64@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@jithyan/git-branch-manager-darwin-x64@npm:3.0.0"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@jithyan/git-branch-manager-linux-x64-gnu@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@jithyan/git-branch-manager-linux-x64-gnu@npm:3.0.0"
+  conditions: os=linux & cpu=x64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@jithyan/git-branch-manager-win32-x64-msvc@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@jithyan/git-branch-manager-win32-x64-msvc@npm:3.0.0"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
 "@jithyan/git-branch-manager@workspace:.":
   version: 0.0.0-use.local
   resolution: "@jithyan/git-branch-manager@workspace:."
   dependencies:
+    "@jithyan/git-branch-manager-darwin-arm64": "npm:3.0.0"
+    "@jithyan/git-branch-manager-darwin-x64": "npm:3.0.0"
+    "@jithyan/git-branch-manager-linux-x64-gnu": "npm:3.0.0"
+    "@jithyan/git-branch-manager-win32-x64-msvc": "npm:3.0.0"
     "@napi-rs/cli": "npm:^2.16.5"
     ava: "npm:^5.1.1"
+  dependenciesMeta:
+    "@jithyan/git-branch-manager-darwin-arm64":
+      optional: true
+    "@jithyan/git-branch-manager-darwin-x64":
+      optional: true
+    "@jithyan/git-branch-manager-linux-x64-gnu":
+      optional: true
+    "@jithyan/git-branch-manager-win32-x64-msvc":
+      optional: true
   bin:
     gbm: bin.js
   languageName: unknown

@@ -1,4 +1,4 @@
 #!/usr/bin/env node
 const { cli } = require("./index");
-const args = process.argv.slice(2);
+const args = process.argv.slice(1);
 cli(args);

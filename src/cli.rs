@@ -31,6 +31,7 @@ pub fn fuzzy_select(branches: &Vec<String>, prompt: &str) -> String {
         .default(0)
         .items(&branches[..])
         .max_length(6)
+        .highlight_matches(true)
         .interact()
     {
         Ok(i) => branches[i].clone(),

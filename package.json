@@ -1,6 +1,6 @@
 {
   "name": "@jithyan/git-branch-manager",
-  "version": "3.0.0-alpha",
+  "version": "3.0.1",
   "main": "bin.js",
   "types": "index.d.ts",
   "author": "jithyan",
@@ -10,7 +10,8 @@
       "additional": [
         "aarch64-apple-darwin"
       ]
-    }
+    },
+    "npmClient": "npm"
   },
   "license": "MIT",
   "devDependencies": {
@@ -50,5 +51,11 @@
     "url": "https://github.com/jithyan/git-branch-manager/issues"
   },
   "homepage": "https://github.com/jithyan/git-branch-manager#readme",
-  "packageManager": "yarn@4.0.1"
+  "packageManager": "yarn@4.0.1",
+  "optionalDependencies": {
+    "@jithyan/git-branch-manager-darwin-arm64": "3.0.0",
+    "@jithyan/git-branch-manager-darwin-x64": "3.0.0",
+    "@jithyan/git-branch-manager-linux-x64-gnu": "3.0.0",
+    "@jithyan/git-branch-manager-win32-x64-msvc": "3.0.0"
+  }
 }
