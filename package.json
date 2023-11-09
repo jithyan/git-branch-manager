@@ -11,7 +11,7 @@
         "aarch64-apple-darwin"
       ]
     },
-    "npmClient": "yarn"
+    "npmClient": "npm"
   },
   "license": "MIT",
   "devDependencies": {
