@@ -53,7 +53,7 @@ jobs:
         uses: actions/setup-node@v4
         if: ${{ !matrix.settings.docker }}
         with:
-          node-version: 18
+          node-version: 20
           cache: yarn
       - name: Install
         uses: dtolnay/rust-toolchain@stable
@@ -122,7 +122,6 @@ jobs:
           - host: windows-latest
             target: x86_64-pc-windows-msvc
         node:
-          - "18"
           - "20"
     runs-on: ${{ matrix.settings.host }}
     steps:
@@ -152,7 +151,6 @@ jobs:
       fail-fast: false
       matrix:
         node:
-          - "18"
           - "20"
     runs-on: ubuntu-latest
     steps:
@@ -200,7 +198,9 @@ jobs:
       - name: Publish
         run: |
           npm config set provenance true
-          echo "@jithyan:registry=https://registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+          echo "@jithyan:registry=https://registry.npmjs.org/" >> ~/.npmrc
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+          cat ./npmrc
           npm publish --access public
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
