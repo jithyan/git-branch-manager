@@ -1,6 +1,6 @@
 {
   "name": "@jithyan/git-branch-manager",
-  "version": "3.0.0",
+  "version": "3.0.1-0",
   "main": "bin.js",
   "types": "index.d.ts",
   "author": "jithyan",
@@ -55,5 +55,6 @@
   "dependencies": {
     "pkg": "^5.8.1",
     "pkg-conf": "^5.0.0"
-  }
+  },
+  "stableVersion": "3.0.0"
 }
