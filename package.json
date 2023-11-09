@@ -28,7 +28,7 @@
     "timeout": "3m"
   },
   "engines": {
-    "node": ">= 18"
+    "node": ">= 16"
   },
   "repository": {
     "type": "git",
