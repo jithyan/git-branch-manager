@@ -23,4 +23,5 @@ spinners = "4.1.0"
 napi-build = "2.0.1"
 
 [profile.release]
-lto = true
+strip = true
+lto = "fat"
