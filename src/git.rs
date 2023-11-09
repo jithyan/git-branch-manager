@@ -64,8 +64,8 @@ fn parse_remote_branches(output: &String) -> (Vec<String>, String) {
 }
 
 pub fn get_remote_branches() -> (Vec<String>, String) {
-    match parse_command(Command::new("git").arg("fetch")) {
-        Ok(output) => println!("{}", style(output).cyan().bold()),
+    match fetch() {
+        Ok(output) => println!("{}", style(output).dim()),
         Err(error) => print_error_and_exit(error),
     };
     match parse_command(Command::new("git").arg("branch").arg("--list").arg("--all")) {
@@ -110,6 +110,7 @@ pub fn remove_branch(branch_name: &String) -> Result<String, String> {
 }
 
 pub fn rebase_from_branch(branch_name: &String) -> Result<String, String> {
+    let _ = fetch();
     parse_command(
         Command::new("git")
             .arg("pull")
@@ -124,5 +125,10 @@ pub fn add_all() -> Result<String, String> {
 }
 
 pub fn pull_fast_forward_only() -> Result<String, String> {
+    let _ = fetch();
     parse_command(Command::new("git").arg("pull").arg("--ff-only"))
+}
+
+pub fn fetch() -> Result<String, String> {
+    parse_command(Command::new("git").arg("fetch"))
 }

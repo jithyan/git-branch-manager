@@ -9,11 +9,6 @@ mod util;
 use clap::{arg, Command};
 use console::style;
 use emoji_printer::print_emojis;
-use git::{
-    add_all, add_and_commit_changes, create_new_branch, get_remote_branches,
-    pull_fast_forward_only, rebase_from_branch, remove_branch, stash_current_changes, stash_pop,
-    switch_to_branch,
-};
 use once_cell::sync::Lazy;
 use util::{print_error_and_exit, spinner};
 
@@ -44,31 +39,34 @@ fn print_success_output(output: String) {
     println!("\n{}", style(output).bright().cyan());
 }
 
+fn print_current_branch(current_branch: &String) {
+    println!(
+        "{} {}{}\n",
+        style("currently on").dim(),
+        GLOBAL_DATA.arrow_emoji,
+        style(current_branch).bright().yellow().bold()
+    );
+}
+
 #[napi]
 pub fn cli(itr: Vec<String>) {
     match init().get_matches_from(itr).subcommand() {
         Some(("switch", _)) => {
             let (branches, current_branch): (Vec<String>, String) = git::get_local_branches();
-
-            println!(
-                "{} {}{}",
-                style("currently on").dim(),
-                GLOBAL_DATA.arrow_emoji,
-                style(current_branch).bright().cyan().bold()
-            );
-
+            print_current_branch(&current_branch);
             let selected_branch = cli::select(branches, "select a branch to switch to");
 
-            match switch_to_branch(&selected_branch) {
+            match git::switch_to_branch(&selected_branch) {
                 Ok(output) => print_success_output(output),
                 Err(error) => print_error_and_exit(error.to_string()),
             }
         }
         Some(("remove", _)) => {
-            let (branches, _): (Vec<String>, String) = git::get_local_branches();
+            let (branches, current_branch): (Vec<String>, String) = git::get_local_branches();
             let selected_branch = cli::select(branches, "select a branch to remove");
+            print_current_branch(&current_branch);
 
-            match remove_branch(&selected_branch) {
+            match git::remove_branch(&selected_branch) {
                 Ok(output) => print_success_output(output),
                 Err(error) => print_error_and_exit(error.to_string()),
             }
@@ -79,14 +77,14 @@ pub fn cli(itr: Vec<String>) {
                 .expect("required");
 
             let mut sp = spinner("Stashing all changes ...".into());
-            match add_all() {
+            match git::add_all() {
                 Ok(_) => {}
                 Err(error) => {
                     sp.stop_with_symbol(&GLOBAL_DATA.cross_emoji);
                     print_error_and_exit(error.to_string())
                 }
             };
-            match stash_current_changes() {
+            match git::stash_current_changes() {
                 Ok(output) => {
                     sp.stop_with_symbol(&GLOBAL_DATA.check_emoji);
                     println!("{}", style(output).dim());
@@ -98,10 +96,10 @@ pub fn cli(itr: Vec<String>) {
             };
 
             let mut sp = spinner(format!("Moving changes to branch \"{}\"...", branch_name));
-            match create_new_branch(&branch_name) {
+            match git::create_new_branch(&branch_name) {
                 Ok(_) => {}
                 Err(error) => {
-                    match stash_pop() {
+                    match git::stash_pop() {
                         Ok(output) => {
                             sp.stop_with_symbol(&GLOBAL_DATA.cross_emoji);
                             println!("{}", style(output).dim().magenta());
@@ -115,7 +113,7 @@ pub fn cli(itr: Vec<String>) {
                 }
             };
 
-            match stash_pop() {
+            match git::stash_pop() {
                 Ok(output) => {
                     sp.stop_with_symbol(&GLOBAL_DATA.check_emoji);
                     println!("{}", style(output).dim());
@@ -127,10 +125,12 @@ pub fn cli(itr: Vec<String>) {
             };
 
             let mut sp = spinner("Committing changes...".into());
-            match add_and_commit_changes("initial commit") {
+            match git::add_and_commit_changes("initial commit") {
                 Ok(output) => {
                     sp.stop_with_symbol(&GLOBAL_DATA.check_emoji);
-                    print_success_output(output)
+                    print_success_output(output);
+                    println!("");
+                    print_current_branch(&branch_name);
                 }
                 Err(error) => {
                     sp.stop_with_symbol(&GLOBAL_DATA.cross_emoji);
@@ -142,9 +142,13 @@ pub fn cli(itr: Vec<String>) {
             let branch_name = sub_matches
                 .get_one::<String>("BRANCH_NAME")
                 .expect("required");
+
+            let (_, current_branch): (Vec<String>, String) = git::get_local_branches();
+            print_current_branch(&current_branch);
+
             let mut sp = spinner(format!("Rebasing from {}", branch_name));
 
-            match rebase_from_branch(branch_name) {
+            match git::rebase_from_branch(branch_name) {
                 Ok(output) => {
                     sp.stop_with_symbol(&GLOBAL_DATA.check_emoji);
                     if output.len() > 0 {
@@ -161,21 +165,15 @@ pub fn cli(itr: Vec<String>) {
         }
         Some(("add", _)) => {
             let mut sp = spinner("Fetching branch names from remote...".into());
-            let (branches, current_branch) = get_remote_branches();
+            let (branches, current_branch) = git::get_remote_branches();
 
             sp.stop_with_symbol(&GLOBAL_DATA.check_emoji);
-
-            println!(
-                "\n{} {}{}\n",
-                style("currently on").dim(),
-                GLOBAL_DATA.arrow_emoji,
-                style(current_branch).bright().cyan().bold()
-            );
+            print_current_branch(&current_branch);
 
             let branch_name =
                 cli::fuzzy_select(&branches, "search for a remote branch to checkout");
 
-            match switch_to_branch(&branch_name) {
+            match git::switch_to_branch(&branch_name) {
                 Ok(output) => print_success_output(output),
                 Err(error) => print_error_and_exit(error.to_string()),
             };
@@ -183,7 +181,7 @@ pub fn cli(itr: Vec<String>) {
         Some(("pff", _)) => {
             let mut sp = spinner("Pulling from remote...".into());
 
-            match pull_fast_forward_only() {
+            match git::pull_fast_forward_only() {
                 Ok(output) => {
                     sp.stop_with_symbol(&GLOBAL_DATA.check_emoji);
                     print_success_output(output);
