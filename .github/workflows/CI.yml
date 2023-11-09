@@ -200,7 +200,7 @@ jobs:
           npm config set provenance true
           echo "@jithyan:registry=https://registry.npmjs.org/" >> ~/.npmrc
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-          cat ./.npmrc
+          cat ~/.npmrc
           npm publish --access public
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
