@@ -57,14 +57,17 @@ pub fn cli(itr: Vec<String>) {
             let selected_branch = cli::select(branches, "select a branch to switch to");
 
             match git::switch_to_branch(&selected_branch) {
-                Ok(output) => print_success_output(output),
+                Ok(output) => {
+                    print_success_output(output);
+                    print_current_branch(&current_branch);
+                }
                 Err(error) => print_error_and_exit(error.to_string()),
             }
         }
         Some(("remove", _)) => {
             let (branches, current_branch): (Vec<String>, String) = git::get_local_branches();
-            let selected_branch = cli::select(branches, "select a branch to remove");
             print_current_branch(&current_branch);
+            let selected_branch = cli::select(branches, "select a branch to remove");
 
             match git::remove_branch(&selected_branch) {
                 Ok(output) => print_success_output(output),
@@ -130,6 +133,7 @@ pub fn cli(itr: Vec<String>) {
                     sp.stop_with_symbol(&GLOBAL_DATA.check_emoji);
                     print_success_output(output);
                     println!("");
+                    print_current_branch(&"To change commit message run: git commit --amend -m \"an updated commit message\"\n".to_string());
                     print_current_branch(&branch_name);
                 }
                 Err(error) => {

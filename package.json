@@ -1,6 +1,6 @@
 {
   "name": "@jithyan/git-branch-manager",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "main": "bin.js",
   "types": "index.d.ts",
   "author": "jithyan",
